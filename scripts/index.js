@@ -10,10 +10,11 @@ const cardsTemplate = document.querySelector('#card-template').content;
 
 function addCard (card, deleteCard) {
   const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
+  
   const cardImage = cardsItem.querySelector('.card__image');
   cardImage.src = card.link;
-  cardImage.alt = card.name;
-
+  cardImage.alt = `фотография ${card.name}`;
+  
   const cardTitle = cardsItem.querySelector('.card__title');
   cardTitle.textContent = card.name;
 
