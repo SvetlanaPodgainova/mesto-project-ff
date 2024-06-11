@@ -7,12 +7,10 @@ const cardsTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
 
-const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
-
-
 // @todo: Функция создания карточки
 
 function addCard (card, deleteCard) {
+  const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardsItem.querySelector('.card__image');
   cardImage.src = card.link;
   cardImage.alt = card.name;
