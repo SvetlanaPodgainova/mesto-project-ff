@@ -34,8 +34,8 @@ function deleteCard (cardsItem) {
 
 // @todo: Вывести карточки на страницу
 
-initialCards.forEach(function(item) {
-  cardsList.append(addCard(item, deleteCard));
+initialCards.forEach(function(card) {
+  cardsList.append(addCard(card, deleteCard));
 })
 
 
