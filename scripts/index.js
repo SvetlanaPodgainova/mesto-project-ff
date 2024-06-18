@@ -19,17 +19,15 @@ function addCard (card, deleteCard) {
   cardTitle.textContent = card.name;
 
   const deleteButton = cardsItem.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click', function(evt) {
-    deleteCard(cardsItem)
-  });
-    
+  deleteButton.addEventListener('click', deleteCard);  
   return cardsItem;
 }
 
 // @todo: Функция удаления карточки
 
-function deleteCard (cardsItem) {
-  cardsItem.remove();
+function deleteCard (event) {
+  const deletedCard = event.target.closest('.card')
+  deletedCard.remove()
 }
 
 // @todo: Вывести карточки на страницу
