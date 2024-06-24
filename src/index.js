@@ -1,3 +1,5 @@
+import '../pages/index.css';
+
 const cardsList = document.querySelector('.places__list');
 
 // @todo: Темплейт карточки
@@ -20,6 +22,7 @@ function addCard (card, deleteCard) {
 
   const deleteButton = cardsItem.querySelector('.card__delete-button');
   deleteButton.addEventListener('click', deleteCard);  
+  
   return cardsItem;
 }
 
@@ -35,5 +38,3 @@ function deleteCard (event) {
 initialCards.forEach(function(card) {
   cardsList.append(addCard(card, deleteCard));
 })
-
-
