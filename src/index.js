@@ -1,43 +1,58 @@
-import './pages/index.css';
+import "./pages/index.css";
+import {
+  initialCards,
+  cardsTemplate,
+  cardsList,
+  addCard,
+  deleteCard,
+} from "./scripts/cards";
 
-const cardsList = document.querySelector('.places__list');
+// Модальное окно редактирования профиля
 
-// @todo: Темплейт карточки
+const popupProfileEdit = document.querySelector(".popup_type_edit");
+const profileEditForm = popupProfileEdit.querySelector(".popup__form");
+const profileNameInput = profileEditForm.querySelector(
+  ".popup__input_type_name"
+);
+const profileJobInput = profileEditForm.querySelector(
+  ".popup__input_type_description"
+);
 
-const cardsTemplate = document.querySelector('#card-template').content;
+// Поля формы заполнены информацией из профиля
 
-// @todo: DOM узлы
+const profileTitle = document.querySelector("profile__title");
+const profileDescription = profileEditForm.querySelector(
+  ".profile__description"
+);
 
-// @todo: Функция создания карточки
+// function handleEditForm() {
+//   profileNameInput.value = profileTitle.textContent;
+//   profileJobInput.value = profileDescription.textContent;
+//  }
 
-function addCard (card, deleteCard) {
-  const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
-  
-  const cardImage = cardsItem.querySelector('.card__image');
-  cardImage.src = card.link;
-  cardImage.alt = `фотография ${card.name}`;
-  
-  const cardTitle = cardsItem.querySelector('.card__title');
-  cardTitle.textContent = card.name;
+const editProfileButton = document.querySelector(".profile__edit-button");
+editProfileButton.addEventListener("click", () => {
+  openModal(popupProfileEdit);
+});
 
-  const deleteButton = cardsItem.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click', deleteCard);  
-  
-  return cardsItem;
+// Функция открытия модального окна
+
+function openModal(modalWindow) {
+  modalWindow.classList.add("popup_is-opened");
+  document.addEventListener("keydow", closePopupEsc);
 }
 
-// @todo: Функция удаления карточки
-
-function deleteCard (event) {
-  const deletedCard = event.target.closest('.card')
-  deletedCard.remove()
+// Функция закрытия модального окна
+function closeModal(modalWindow) {
+  modalWindow.classList.remove("popup_is-opened");
 }
 
-// @todo: Вывести карточки на страницу
+Закрытие модального окна оп ESC
 
-initialCards.forEach(function(item) {
-  cardsList.append(addCard(item, deleteCard));
-})
-
-
+function closeModalByEsc(evt) {
+  if (evt.key === 'Escape') {
+    const modalClosed = document.querySelector('.popup_is-opened')
+      closeModal(modalClosed)
+  }
+}
 
