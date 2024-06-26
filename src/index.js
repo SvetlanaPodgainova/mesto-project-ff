@@ -25,34 +25,60 @@ const profileDescription = profileEditForm.querySelector(
   ".profile__description"
 );
 
-// function handleEditForm() {
-//   profileNameInput.value = profileTitle.textContent;
-//   profileJobInput.value = profileDescription.textContent;
-//  }
+// Модальное окна редактора профиля
 
 const editProfileButton = document.querySelector(".profile__edit-button");
+
 editProfileButton.addEventListener("click", () => {
   openModal(popupProfileEdit);
 });
 
-// Функция открытия модального окна
+// Попап добавления новой карточки
+
+const popupNewCard = document.querySelector(".popup_type_new-card");
+const addNewCardButton = document.querySelector(".profile__add-button");
+
+addNewCardButton.addEventListener("click", () => {
+  openModal(popupNewCard);
+});
+
+// Открытие модальныx окон
 
 function openModal(modalWindow) {
   modalWindow.classList.add("popup_is-opened");
-  document.addEventListener("keydow", closePopupEsc);
+  document.addEventListener("click", closeModalByBtn);
+  document.addEventListener("keydown", closeModalByEsc);
 }
 
-// Функция закрытия модального окна
+// Закрытие модальных окон
+
 function closeModal(modalWindow) {
   modalWindow.classList.remove("popup_is-opened");
+  document.removeEventListener("click", closeModalByBtn);
+  document.removeEventListener("keydown", closeModalByEsc);
 }
 
-Закрытие модального окна оп ESC
+// Закрытие модального окна по кнопке
 
-function closeModalByEsc(evt) {
-  if (evt.key === 'Escape') {
-    const modalClosed = document.querySelector('.popup_is-opened')
-      closeModal(modalClosed)
+function closeModalByBtn(evt) {
+  if (evt.target.classList.contains("popup__close")) {
+    const closedModal = evt.target.closest(".popup");
+    closeModal(closedModal);
   }
 }
 
+// Закрытие модального окна по ESC
+
+function closeModalByEsc(evt) {
+  if (evt.key === "Escape") {
+    const modalForClose = document.querySelector(".popup_is-opened");
+    closeModal(modalForClose);
+  }
+}
+
+// function closeModalByEsc(evt) {
+//   if (evt.key === 'Escape') {
+//     const modalClosed = document.querySelector('.popup_is-opened');
+//     closeModal(modalClosed);
+//   }
+// }
