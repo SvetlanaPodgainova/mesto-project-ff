@@ -44,10 +44,13 @@ addNewCardButton.addEventListener("click", () => {
 
 // Открытие модальныx окон
 
+const allPopup = document.querySelector(".popup");
+
 function openModal(modalWindow) {
   modalWindow.classList.add("popup_is-opened");
   document.addEventListener("click", closeModalByBtn);
   document.addEventListener("keydown", closeModalByEsc);
+  document.addEventListener("click", closeModelOverlay);
 }
 
 // Закрытие модальных окон
@@ -56,6 +59,7 @@ function closeModal(modalWindow) {
   modalWindow.classList.remove("popup_is-opened");
   document.removeEventListener("click", closeModalByBtn);
   document.removeEventListener("keydown", closeModalByEsc);
+  document.removeEventListener("keydown", closeModelOverlay);
 }
 
 // Закрытие модального окна по кнопке
@@ -76,9 +80,11 @@ function closeModalByEsc(evt) {
   }
 }
 
-// function closeModalByEsc(evt) {
-//   if (evt.key === 'Escape') {
-//     const modalClosed = document.querySelector('.popup_is-opened');
-//     closeModal(modalClosed);
-//   }
-// }
+// Закрытие модального окна кликом на оверлей
+
+function closeModelOverlay(evt) {
+  if (evt.target.classList.contains("popup_is-opened")) {
+    const modalForClose = document.querySelector(".popup_is-opened");
+    closeModal(modalForClose);
+  }
+}
