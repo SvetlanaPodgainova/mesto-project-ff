@@ -1,4 +1,4 @@
-export {initialCards, cardsTemplate, cardsList, addCard, deleteCard}
+export { initialCards, cardsTemplate, cardsList, addCard, deleteCard };
 
 const initialCards = [
   {
@@ -24,49 +24,40 @@ const initialCards = [
   {
     name: "Байкал",
     link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  }
+  },
 ];
 
 // @todo: Темплейт карточки
 
-const cardsTemplate = document.querySelector('#card-template').content;
-const cardsList = document.querySelector('.places__list');
+const cardsTemplate = document.querySelector("#card-template").content;
+const cardsList = document.querySelector(".places__list");
 
 // @todo: Функция создания карточки
 
-function addCard (card, deleteCard, openModal) {
-  const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
-  
-  const cardImage = cardsItem.querySelector('.card__image');
+function addCard(card, deleteCard, openPopupImg) {
+  const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
+
+  const cardImage = cardsItem.querySelector(".card__image");
   cardImage.src = card.link;
   cardImage.alt = `фотография ${card.name}`;
-  cardImage.addEventListener("click", () => {
-    openModal(popupImg);
-  });
 
-  
-  const cardTitle = cardsItem.querySelector('.card__title');
+  const cardTitle = cardsItem.querySelector(".card__title");
   cardTitle.textContent = card.name;
 
-  const deleteButton = cardsItem.querySelector('.card__delete-button');
-  deleteButton.addEventListener('click', (e) => {
-    deleteCard(cardsItem)
-  })
-  
+  const deleteButton = cardsItem.querySelector(".card__delete-button");
+  deleteButton.addEventListener("click", () => {
+    deleteCard(cardsItem);
+  });
+
   return cardsItem;
 }
 
 // @todo: Функция удаления карточки
 
-function deleteCard (item) {
+function deleteCard(item) {
   item.remove();
 }
 
-
-// @todo: Вывести карточки на страницу
-
-initialCards.forEach(function(item) {
-  cardsList.append(addCard(item, deleteCard));
-})
-
-
+function openPopupImg(item) {
+  console.log("тык");
+}
