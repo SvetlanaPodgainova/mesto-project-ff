@@ -5,46 +5,35 @@ import {
   cardsList,
   addCard,
   deleteCard,
-} from "./scripts/cards";
+} from "./components/cards";
 
-// Модальное окно редактирования профиля
+
+// Константы кнопок вызова форм
+
+const editProfileButton = document.querySelector(".profile__edit-button"); 
+const addNewCardButton = document.querySelector(".profile__add-button");
+
+
+
+// Константы попапов
 
 const popupProfileEdit = document.querySelector(".popup_type_edit");
-const profileEditForm = popupProfileEdit.querySelector(".popup__form");
-const profileNameInput = profileEditForm.querySelector(
-  ".popup__input_type_name"
-);
-const profileJobInput = profileEditForm.querySelector(
-  ".popup__input_type_description"
-);
+const popupNewCard = document.querySelector(".popup_type_new-card");
 
-// Поля формы заполнены информацией из профиля
 
-const profileTitle = document.querySelector("profile__title");
-const profileDescription = profileEditForm.querySelector(
-  ".profile__description"
-);
 
-// Модальное окна редактора профиля
-
-const editProfileButton = document.querySelector(".profile__edit-button");
+// Слушатели
 
 editProfileButton.addEventListener("click", () => {
   openModal(popupProfileEdit);
 });
-
-// Попап добавления новой карточки
-
-const popupNewCard = document.querySelector(".popup_type_new-card");
-const addNewCardButton = document.querySelector(".profile__add-button");
-
 addNewCardButton.addEventListener("click", () => {
   openModal(popupNewCard);
 });
 
-// Открытие модальныx окон
 
-const allPopup = document.querySelector(".popup");
+
+// Открытие модальныx окон
 
 function openModal(modalWindow) {
   modalWindow.classList.add("popup_is-opened");

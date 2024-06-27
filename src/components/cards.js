@@ -34,12 +34,16 @@ const cardsList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
 
-function addCard (card, deleteCard) {
+function addCard (card, deleteCard, openModal) {
   const cardsItem = cardsTemplate.querySelector('.card').cloneNode(true);
   
   const cardImage = cardsItem.querySelector('.card__image');
   cardImage.src = card.link;
   cardImage.alt = `фотография ${card.name}`;
+  cardImage.addEventListener("click", () => {
+    openModal(popupImg);
+  });
+
   
   const cardTitle = cardsItem.querySelector('.card__title');
   cardTitle.textContent = card.name;
