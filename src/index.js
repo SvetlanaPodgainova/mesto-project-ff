@@ -65,7 +65,7 @@ function closeModal(modalWindow) {
 // Закрытие модального окна по кнопке
 
 function closeModalByBtn(evt) {
-  if (evt.target.classList.contains("popup__close")) {
+  if (evt.target.closest(".popup__close")) {
     const closedModal = evt.target.closest(".popup");
     closeModal(closedModal);
   }
@@ -83,7 +83,7 @@ function closeModalByEsc(evt) {
 // Закрытие модального окна кликом на оверлей
 
 function closeModelOverlay(evt) {
-  if (evt.target.classList.contains("popup_is-opened")) {
+  if (evt.target.closest(".popup_is-opened")) {
     const modalForClose = document.querySelector(".popup_is-opened");
     closeModal(modalForClose);
   }
