@@ -34,7 +34,7 @@ const cardsList = document.querySelector(".places__list");
 
 // @todo: Функция создания карточки
 
-function addCard(card, deleteCard, openPopupImg) {
+function addCard(card, deleteCard) {
   const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardsItem.querySelector(".card__image");
@@ -58,6 +58,3 @@ function deleteCard(item) {
   item.remove();
 }
 
-function openPopupImg(item) {
-  console.log("тык");
-}
