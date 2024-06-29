@@ -6,6 +6,7 @@ import {
   cardsList,
   addCard,
   deleteCard,
+  likeCard
 } from "./components/cards";
 
 
@@ -31,5 +32,7 @@ addNewCardButton.addEventListener("click", () => {
 // Вывести карточки на страницу
 
 initialCards.forEach(function (item) {
-  cardsList.append(addCard(item, deleteCard));
+  cardsList.append(addCard(item, deleteCard, likeCard));
 });
+
+

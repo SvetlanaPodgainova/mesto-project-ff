@@ -34,7 +34,8 @@ const cardsList = document.querySelector(".places__list");
 
 // @todo: Функция создания карточки
 
-function addCard(card, deleteCard) {
+function addCard(card, deleteCard, likeCard) {
+
   const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardsItem.querySelector(".card__image");
@@ -45,9 +46,14 @@ function addCard(card, deleteCard) {
   cardTitle.textContent = card.name;
 
   const deleteButton = cardsItem.querySelector(".card__delete-button");
+
   deleteButton.addEventListener("click", () => {
     deleteCard(cardsItem);
   });
+
+  const likeButton = cardsItem.querySelector('.card__like-button')
+
+  likeButton.addEventListener('click', likeCard)
 
   return cardsItem;
 }
@@ -57,4 +63,11 @@ function addCard(card, deleteCard) {
 function deleteCard(item) {
   item.remove();
 }
+
+export function likeCard (evt) {
+  if(evt.target.closest('.card__like-button')) {
+    evt.target.classList.toggle('card__like-button_is-active');
+  }
+}
+
 
