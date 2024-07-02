@@ -1,5 +1,5 @@
 
-const popupEditUser = document.querySelector('.popup__form');
+
 const nameInput = popupEditUser.querySelector('.popup__input_type_name');
 const jobInput = popupEditUser.querySelector('.popup__input_type_description');
 
