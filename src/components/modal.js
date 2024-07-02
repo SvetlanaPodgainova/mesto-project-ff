@@ -9,22 +9,6 @@ export function openModal(modalWindow) {
 
 //  Открытие попапа для картинок
 
-// 
-
-//   //   function createPopup (card, popupContet) {
-//   //    const popupForImg = document.querySelector('.popup_type_image');
-//   //    const imgForPopup = popupForImg.querySelector('.popup__image');
-//   //    const captionPopup = popupForImg.querySelector('.popup__caption')
-
-//   //   //  imgForPopup.src = cardImage.src;
-//   //   //  imgForPopup.alt = cardImage.alt;
-//   //   //  captionPopup.textContent = cardTitle.textContent;
-
-    
-//   // }
- 
-//   // openModal(popupForImg)
-// }}
 
 
 
