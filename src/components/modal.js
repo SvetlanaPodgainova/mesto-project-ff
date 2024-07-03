@@ -7,17 +7,13 @@ export function openModal(modalWindow) {
   document.addEventListener("click", closeModelOverlay);
 }
 
-// Открытие окна редактирования профиля
-
-
-
 // Закрытие модальных окон
 
 export function closeModal(modalWindow) {
   modalWindow.classList.remove("popup_is-opened");
   document.removeEventListener("click", closeModalByBtn);
   document.removeEventListener("keydown", closeModalByEsc);
-  // document.removeEventListener("click", closeModelOverlay);
+  document.removeEventListener("click", closeModelOverlay);
 }
 
 // Закрытие модального окна по кнопке
@@ -42,7 +38,7 @@ function closeModalByEsc(evt) {
 
 function closeModelOverlay(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
-    const modalForClose = evt.target.closest('.popup');
+    const modalForClose = evt.target.closest(".popup");
     closeModal(modalForClose);
     evt.stopPropagation();
   }

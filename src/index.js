@@ -9,22 +9,24 @@ import {
   likeCard,
 } from "./components/cards";
 
-// Профиль пользователя
+// профиль пользователя
 
 const popupProfileEdit = document.querySelector(".popup_type_edit");
-const userForm = document.querySelector(".popup__form");
 const editProfileButton = document.querySelector(".profile__edit-button");
-const nameInput = userForm.querySelector(".popup__input_type_name");
-const jobInput = userForm.querySelector(".popup__input_type_description");
+
 const userName = document.querySelector(".profile__title");
 const userJob = document.querySelector(".profile__description");
 
-// Слушатели
+const userForm = popupProfileEdit.querySelector(".popup__form");
+const nameInput = userForm.querySelector(".popup__input_type_name");
+const jobInput = userForm.querySelector(".popup__input_type_description");
+
+// слушатели
 
 userForm.addEventListener("submit", handleFormSubmit);
 editProfileButton.addEventListener("click", openPopupUserProfile);
 
-// Открытие формы с заполненными данными
+// открытие формы с заполненными данными
 
 function openPopupUserProfile() {
   nameInput.value = userName.textContent;
@@ -32,7 +34,7 @@ function openPopupUserProfile() {
   openModal(popupProfileEdit);
 }
 
-// Обработчик для кнопки "Сохранить" в форме профиля
+// обработчик для кнопки "Сохранить" в форме профиля
 
 function handleFormSubmit(evt) {
   evt.preventDefault();
@@ -43,20 +45,20 @@ function handleFormSubmit(evt) {
 
 // -------------------------------------------------------------------------->
 
-// Добавление новой карточки пользователем
+// добавление новой карточки пользователем
 
 const popupNewCard = document.querySelector(".popup_type_new-card");
 const newCardForm = popupNewCard.querySelector(".popup__form");
 const newCardButton = document.querySelector(".profile__add-button");
 
-// Слушатели
+// слушатели
 
 newCardButton.addEventListener("click", () => {
   openModal(popupNewCard);
 });
 newCardForm.addEventListener("submit", handleFormNewCard);
 
-// Обработчик для кнопки "Сохранить" в форме добавления новой карточки
+// обработчик для кнопки "Сохранить" в форме добавления новой карточки
 
 function handleFormNewCard(evt) {
   evt.preventDefault();
@@ -71,15 +73,38 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  cardsList.prepend(addCard(newCardUser, deleteCard, likeCard));
+  cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
   closeModal(popupNewCard);
-  newCardForm.reset(); 
+  newCardForm.reset();
 }
 
 // -------------------------------------------------------------------------->
 
-// Вывести карточки на страницу
+// открыть картинку в модальном окне
+const popupCardImage = document.querySelector(".popup_type_image");
+
+// открытие формы с заполненными данными
+
+function openPopupImage(evt) {
+  const card = evt.target.closest(".card");
+  const cardImg = card.querySelector(".card__image");
+  const cardTitle = card.querySelector(".card__title");
+  
+  const popupImage = popupCardImage.querySelector(".popup__image");
+  const popupCaption = popupCardImage.querySelector(".popup__caption");
+
+  popupImage.src = cardImg.src;
+  popupImage.alt = cardImg.alt;
+  popupCaption.textContent = cardTitle.textContent;
+  openModal(popupCardImage);
+}
+
+// слушатели
+
+// вывести карточки на страницу
 
 initialCards.forEach(function (item) {
-  cardsList.append(addCard(item, deleteCard, likeCard));
+  cardsList.append(addCard(item, deleteCard, likeCard, openPopupImage));
 });
+
+// -------------------------------------------------------------------------->
