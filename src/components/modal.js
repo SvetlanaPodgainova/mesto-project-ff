@@ -1,45 +1,42 @@
-// Открытие модальныx окон
+// открытие модальныx окон
 
-export function openModal(modalWindow) {
-  modalWindow.classList.add("popup_is-opened");
-  document.addEventListener("click", closeModalByBtn);
+export function openModal(popup) {
+  popup.classList.add("popup_is-opened");
+  popup.addEventListener("click", closeModalByBtn);
+  popup.addEventListener("click", closeModelOverlay);
   document.addEventListener("keydown", closeModalByEsc);
-  document.addEventListener("click", closeModelOverlay);
 }
 
-// Закрытие модальных окон
+// закрытие модальных окон
 
-export function closeModal(modalWindow) {
-  modalWindow.classList.remove("popup_is-opened");
-  document.removeEventListener("click", closeModalByBtn);
+export function closeModal(popup) {
+  popup.classList.remove("popup_is-opened");
+  popup.removeEventListener("click", closeModalByBtn);
+  popup.removeEventListener("click", closeModelOverlay);
   document.removeEventListener("keydown", closeModalByEsc);
-  document.removeEventListener("click", closeModelOverlay);
 }
 
-// Закрытие модального окна по кнопке
+// закрытие модального окна по кнопке-крестику
 
 function closeModalByBtn(evt) {
-  if (evt.target.closest(".popup__close")) {
-    const closedModal = evt.target.closest(".popup");
-    closeModal(closedModal);
+  if (evt.target.classList.contains("popup__close")) {
+    closeModal(evt.target.closest(".popup"));
   }
 }
 
-// Закрытие модального окна по ESC
+// закрытие модального окна по ESC
 
 function closeModalByEsc(evt) {
   if (evt.key === "Escape") {
-    const modalForClose = document.querySelector(".popup_is-opened");
-    closeModal(modalForClose);
+    closeModal(document.querySelector(".popup_is-opened"));
   }
 }
 
-// Закрытие модального окна кликом на оверлей
+// закрытие модального окна кликом на оверлей
 
 function closeModelOverlay(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
-    const modalForClose = evt.target.closest(".popup");
-    closeModal(modalForClose);
+    closeModal(evt.target.closest(".popup"));
     evt.stopPropagation();
   }
 }

@@ -1,18 +1,17 @@
 import "./pages/index.css";
-import { openModal, closeModal } from "./components/modal";
+import { initialCards } from "./components/cards";
 import {
-  initialCards,
   cardsTemplate,
-  cardsList,
   addCard,
   deleteCard,
   likeCard,
-} from "./components/cards";
+} from "./components/card";
+import { openModal, closeModal } from "./components/modal";
 
 // профиль пользователя
 
 const popupProfileEdit = document.querySelector(".popup_type_edit");
-const editProfileButton = document.querySelector(".profile__edit-button");
+const buttonProfileEdit = document.querySelector(".profile__edit-button");
 
 const userName = document.querySelector(".profile__title");
 const userJob = document.querySelector(".profile__description");
@@ -24,7 +23,7 @@ const jobInput = userForm.querySelector(".popup__input_type_description");
 // слушатели
 
 userForm.addEventListener("submit", handleFormSubmit);
-editProfileButton.addEventListener("click", openPopupUserProfile);
+buttonProfileEdit.addEventListener("click", openPopupUserProfile);
 
 // открытие формы с заполненными данными
 
@@ -80,7 +79,8 @@ function handleFormNewCard(evt) {
 
 // -------------------------------------------------------------------------->
 
-// открыть картинку в модальном окне
+// попап для картинок
+
 const popupCardImage = document.querySelector(".popup_type_image");
 
 // открытие формы с заполненными данными
@@ -89,19 +89,20 @@ function openPopupImage(evt) {
   const card = evt.target.closest(".card");
   const cardImg = card.querySelector(".card__image");
   const cardTitle = card.querySelector(".card__title");
-  
+
   const popupImage = popupCardImage.querySelector(".popup__image");
   const popupCaption = popupCardImage.querySelector(".popup__caption");
 
   popupImage.src = cardImg.src;
   popupImage.alt = cardImg.alt;
   popupCaption.textContent = cardTitle.textContent;
+
   openModal(popupCardImage);
 }
 
-// слушатели
-
 // вывести карточки на страницу
+
+const cardsList = document.querySelector(".places__list");
 
 initialCards.forEach(function (item) {
   cardsList.append(addCard(item, deleteCard, likeCard, openPopupImage));
