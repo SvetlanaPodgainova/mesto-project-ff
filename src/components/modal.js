@@ -3,7 +3,7 @@
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
   popup.addEventListener("click", closeModalByBtn);
-  popup.addEventListener("click", closeModelOverlay);
+  popup.addEventListener("click", closeModalOverlay);
   document.addEventListener("keydown", closeModalByEsc);
 }
 
@@ -12,7 +12,7 @@ export function openModal(popup) {
 export function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
   popup.removeEventListener("click", closeModalByBtn);
-  popup.removeEventListener("click", closeModelOverlay);
+  popup.removeEventListener("click", closeModalOverlay);
   document.removeEventListener("keydown", closeModalByEsc);
 }
 
@@ -34,7 +34,7 @@ function closeModalByEsc(evt) {
 
 // закрытие модального окна кликом на оверлей
 
-function closeModelOverlay(evt) {
+function closeModalOverlay(evt) {
   if (evt.target.classList.contains("popup_is-opened")) {
     closeModal(evt.target.closest(".popup"));
     evt.stopPropagation();
