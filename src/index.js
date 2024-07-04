@@ -22,7 +22,7 @@ const jobInput = userForm.querySelector(".popup__input_type_description");
 
 // слушатели
 
-userForm.addEventListener("submit", handleFormSubmit);
+userForm.addEventListener("submit", handleProfileFormSubmit);
 buttonProfileEdit.addEventListener("click", openPopupUserProfile);
 
 // открытие формы с заполненными данными
@@ -35,7 +35,7 @@ function openPopupUserProfile() {
 
 // обработчик для кнопки "Сохранить" в форме профиля
 
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   userName.textContent = nameInput.value;
   userJob.textContent = jobInput.value;
@@ -72,7 +72,9 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
+  cardsList.prepend(
+    addCard(newCardUser, deleteCard, likeCard, openPopupImage)
+  );
   closeModal(popupNewCard);
   newCardForm.reset();
 }
@@ -83,22 +85,18 @@ function handleFormNewCard(evt) {
 
 const popupCardImage = document.querySelector(".popup_type_image");
 
-// открытие формы с заполненными данными
+// открытие формы с отображением картинки и названия
 
-function openPopupImage(evt) {
-  const card = evt.target.closest(".card");
-  const cardImg = card.querySelector(".card__image");
-  const cardTitle = card.querySelector(".card__title");
-
+function openPopupImage(link, name) {
   const popupImage = popupCardImage.querySelector(".popup__image");
   const popupCaption = popupCardImage.querySelector(".popup__caption");
-
-  popupImage.src = cardImg.src;
-  popupImage.alt = cardImg.alt;
-  popupCaption.textContent = cardTitle.textContent;
-
+  popupImage.src = link;
+  popupImage.alt = name;
+  popupCaption.textContent = name;
   openModal(popupCardImage);
 }
+
+// -------------------------------------------------------------------------->
 
 // вывести карточки на страницу
 
