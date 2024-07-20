@@ -25,13 +25,13 @@ const jobInput = userForm.querySelector(".popup__input_type_description");
 userForm.addEventListener("submit", handleProfileFormSubmit);
 buttonProfileEdit.addEventListener("click", openPopupUserProfile);
 
-// открытие формы с заполненными данными + очистка валидации
+// открытие формы с заполненными данными
 
 function openPopupUserProfile() {
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
-  openModal(popupProfileEdit);
   clearValidation(popupProfileEdit, validationConfig);
+  openModal(popupProfileEdit);
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
@@ -54,6 +54,8 @@ const newCardButton = document.querySelector(".profile__add-button");
 // слушатели
 
 newCardButton.addEventListener("click", () => {
+  newCardForm.reset();
+  clearValidation(popupNewCard, validationConfig);
   openModal(popupNewCard);
 });
 newCardForm.addEventListener("submit", handleFormNewCard);
@@ -75,8 +77,6 @@ function handleFormNewCard(evt) {
 
   cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
   closeModal(popupNewCard);
-  newCardForm.reset();
-  clearValidation(popupNewCard, validationConfig);
 }
 
 // -------------------------------------------------------------------------->
@@ -114,8 +114,8 @@ const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
-  inputErrorClass: "popup__input-type-error",
-  errorClass: "popup__input-error_active",
+  inputErrorClass: "popup__input_type_error",
+  errorSpanClass: "popup__input-error_active",
 };
 
 // добавляет класс с ошибкой
@@ -125,7 +125,7 @@ function showInputError(formElement, formInput, errorMessage) {
 
   formInput.classList.add(validationConfig.inputErrorClass);
   errorSpan.textContent = errorMessage;
-  errorSpan.classList.add(validationConfig.errorClass);
+  errorSpan.classList.add(validationConfig.errorSpanClass);
 }
 
 // удаляет класс с ошибкой
@@ -135,7 +135,7 @@ function hideInputError(formElement, formInput) {
 
   formInput.classList.remove(validationConfig.inputErrorClass);
   errorSpan.textContent = "";
-  errorSpan.classList.remove(validationConfig.errorClass);
+  errorSpan.classList.remove(validationConfig.errorSpanClass);
 }
 
 // проверяет валидность поля
@@ -164,11 +164,10 @@ function setEventListeners(formElement) {
     validationConfig.submitButtonSelector
   );
 
-  toggleButtonState(inputList, formButton);
-
   inputList.forEach((formInput) => {
     formInput.addEventListener("input", () => {
       checkInputValidity(formElement, formInput);
+      toggleButtonState(inputList, formButton);
     });
   });
 }
@@ -209,12 +208,14 @@ function clearValidation(formElement, validationConfig) {
   const inputList = Array.from(
     formElement.querySelectorAll(validationConfig.inputSelector)
   );
+
   inputList.forEach((formInput) => {
     hideInputError(formElement, formInput);
   });
-  toggleButtonState(inputList, formElement.querySelector(validationConfig.submitButtonSelector));
-  console.log(formElement.querySelector(validationConfig.submitButtonSelector));
+  toggleButtonState(
+    inputList,
+    formElement.querySelector(validationConfig.submitButtonSelector)
+  );
 }
-
 
 enableValidation();
