@@ -72,9 +72,7 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  cardsList.prepend(
-    addCard(newCardUser, deleteCard, likeCard, openPopupImage)
-  );
+  cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
   closeModal(popupNewCard);
   newCardForm.reset();
 }
@@ -107,3 +105,60 @@ initialCards.forEach(function (item) {
 });
 
 // -------------------------------------------------------------------------->
+
+// Валидация форм
+
+// добавляет класс с ошибкой
+
+function showInputError(formElement, formInput, errorMessage) {
+  const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
+
+  formInput.classList.add("popup__input_type_error");
+  errorSpan.textContent = errorMessage;
+  errorSpan.classList.add("popup__input-error_active");
+}
+
+// удаляет класс с ошибкой
+
+function hideInputError(formElement, formInput) {
+  const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
+
+  formInput.classList.remove("popup__input_type_error");
+  errorSpan.textContent = "";
+  errorSpan.classList.remove("popup__input-error_active");
+}
+
+// проверяет валидность поля
+
+function checkInputValidity(formElement, formInput) {
+  if (!formInput.validity.valid) {
+    showInputError(formElement, formInput, formInput.validationMessage);
+  } else {
+    hideInputError(formElement, formInput);
+  }
+}
+
+// добавляем слушатель всем формам
+
+function setEventListeners(formElement) {
+  const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
+  console.log(inputList);
+
+  inputList.forEach((formInput) => {
+    formInput.addEventListener("input", () => {
+      checkInputValidity(formElement, formInput);
+    });
+  });
+}
+
+// находим, перебираем и вешаем слушателя на все формы на сайте
+
+function enableValidation() {
+  const formList = Array.from(document.querySelectorAll(".popup__form"));
+
+  formList.forEach((formElement) => {
+    setEventListeners(formElement);
+  });
+}
+
+enableValidation();
