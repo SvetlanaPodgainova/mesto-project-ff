@@ -212,10 +212,9 @@ function clearValidation(formElement, validationConfig) {
   inputList.forEach((formInput) => {
     hideInputError(formElement, formInput);
   });
-  toggleButtonState(
-    inputList,
-    formElement.querySelector(validationConfig.submitButtonSelector)
-  );
+  toggleButtonState(inputList, formElement.querySelector(validationConfig.submitButtonSelector));
+  console.log(formElement.querySelector(validationConfig.submitButtonSelector));
 }
+
 
 enableValidation();
