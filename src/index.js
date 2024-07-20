@@ -25,12 +25,13 @@ const jobInput = userForm.querySelector(".popup__input_type_description");
 userForm.addEventListener("submit", handleProfileFormSubmit);
 buttonProfileEdit.addEventListener("click", openPopupUserProfile);
 
-// открытие формы с заполненными данными
+// открытие формы с заполненными данными + очистка валидации
 
 function openPopupUserProfile() {
   nameInput.value = userName.textContent;
   jobInput.value = userJob.textContent;
   openModal(popupProfileEdit);
+  clearValidation(popupProfileEdit, validationConfig);
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
@@ -75,6 +76,7 @@ function handleFormNewCard(evt) {
   cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
   closeModal(popupNewCard);
   newCardForm.reset();
+  clearValidation(popupNewCard, validationConfig);
 }
 
 // -------------------------------------------------------------------------->
@@ -108,12 +110,12 @@ initialCards.forEach(function (item) {
 
 // Валидация форм
 
-const validationConfig = {  
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',  
-  submitButtonSelector: '.popup__button',
-  inputErrorClass: 'popup__input-type-error',
-  errorClass: 'popup__input-error_active',
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input-type-error",
+  errorClass: "popup__input-error_active",
 };
 
 // добавляет класс с ошибкой
@@ -121,9 +123,9 @@ const validationConfig = {
 function showInputError(formElement, formInput, errorMessage) {
   const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
 
-  formInput.classList.add("popup__input_type_error");
+  formInput.classList.add(validationConfig.inputErrorClass);
   errorSpan.textContent = errorMessage;
-  errorSpan.classList.add("popup__input-error_active");
+  errorSpan.classList.add(validationConfig.errorClass);
 }
 
 // удаляет класс с ошибкой
@@ -131,9 +133,9 @@ function showInputError(formElement, formInput, errorMessage) {
 function hideInputError(formElement, formInput) {
   const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
 
-  formInput.classList.remove("popup__input_type_error");
+  formInput.classList.remove(validationConfig.inputErrorClass);
   errorSpan.textContent = "";
-  errorSpan.classList.remove("popup__input-error_active");
+  errorSpan.classList.remove(validationConfig.errorClass);
 }
 
 // проверяет валидность поля
@@ -155,12 +157,17 @@ function checkInputValidity(formElement, formInput) {
 // добавляем слушатель всем формам
 
 function setEventListeners(formElement) {
-  const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
-  const formButton = formElement.querySelector(".popup__button");
+  const inputList = Array.from(
+    formElement.querySelectorAll(validationConfig.inputSelector)
+  );
+  const formButton = formElement.querySelector(
+    validationConfig.submitButtonSelector
+  );
+
+  toggleButtonState(inputList, formButton);
 
   inputList.forEach((formInput) => {
     formInput.addEventListener("input", () => {
-      toggleButtonState(inputList, formButton);
       checkInputValidity(formElement, formInput);
     });
   });
@@ -169,7 +176,9 @@ function setEventListeners(formElement) {
 // находим, перебираем и вешаем слушателя на все формы на сайте
 
 function enableValidation() {
-  const formList = Array.from(document.querySelectorAll(".popup__form"));
+  const formList = Array.from(
+    document.querySelectorAll(validationConfig.formSelector)
+  );
 
   formList.forEach((formElement) => {
     setEventListeners(formElement);
@@ -180,7 +189,6 @@ function enableValidation() {
 
 function hasInvalidInput(inputList) {
   return inputList.some((formInput) => {
-    console.log(formInput.validity);
     return !formInput.validity.valid;
   });
 }
@@ -193,6 +201,21 @@ function toggleButtonState(inputList, formButton) {
   } else {
     formButton.disabled = false;
   }
+}
+
+// очистка ошибок валидации вызовом clearValidation
+
+function clearValidation(formElement, validationConfig) {
+  const inputList = Array.from(
+    formElement.querySelectorAll(validationConfig.inputSelector)
+  );
+  inputList.forEach((formInput) => {
+    hideInputError(formElement, formInput);
+  });
+  toggleButtonState(
+    inputList,
+    formElement.querySelector(validationConfig.submitButtonSelector)
+  );
 }
 
 enableValidation();
