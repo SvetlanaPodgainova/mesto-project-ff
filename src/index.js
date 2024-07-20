@@ -108,6 +108,14 @@ initialCards.forEach(function (item) {
 
 // Валидация форм
 
+const validationConfig = {  
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',  
+  submitButtonSelector: '.popup__button',
+  inputErrorClass: 'popup__input-type-error',
+  errorClass: 'popup__input-error_active',
+};
+
 // добавляет класс с ошибкой
 
 function showInputError(formElement, formInput, errorMessage) {
@@ -131,6 +139,12 @@ function hideInputError(formElement, formInput) {
 // проверяет валидность поля
 
 function checkInputValidity(formElement, formInput) {
+  if (formInput.validity.patternMismatch) {
+    formInput.setCustomValidity(formInput.dataset.errorMessage);
+  } else {
+    formInput.setCustomValidity("");
+  }
+
   if (!formInput.validity.valid) {
     showInputError(formElement, formInput, formInput.validationMessage);
   } else {
@@ -142,10 +156,11 @@ function checkInputValidity(formElement, formInput) {
 
 function setEventListeners(formElement) {
   const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
-  console.log(inputList);
+  const formButton = formElement.querySelector(".popup__button");
 
   inputList.forEach((formInput) => {
     formInput.addEventListener("input", () => {
+      toggleButtonState(inputList, formButton);
       checkInputValidity(formElement, formInput);
     });
   });
@@ -159,6 +174,25 @@ function enableValidation() {
   formList.forEach((formElement) => {
     setEventListeners(formElement);
   });
+}
+
+// проверка инпутов на валидность (возваращает true если поле не валидно)
+
+function hasInvalidInput(inputList) {
+  return inputList.some((formInput) => {
+    console.log(formInput.validity);
+    return !formInput.validity.valid;
+  });
+}
+
+// переключение состояние кнопки
+
+function toggleButtonState(inputList, formButton) {
+  if (hasInvalidInput(inputList)) {
+    formButton.disabled = true;
+  } else {
+    formButton.disabled = false;
+  }
 }
 
 enableValidation();
