@@ -86,10 +86,6 @@ newCardButton.addEventListener("click", () => {
 });
 newCardForm.addEventListener("submit", handleFormNewCard);
 
-// вывести карточки на страницу
-
-const cardsList = document.querySelector(".places__list");
-
 // отрисовывает начальные карточки из сервера
 
 function renderCardInfo(data) {
@@ -113,7 +109,9 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  updateCardInfo(newCardConfig).then((data) => renderCardInfo(data));
+  updateCardInfo(newCardConfig).then((data) => {
+    cardsList.prepend(addCard(data, deleteCard, likeCard, openPopupImage));
+  });
 
   closeModal(popupNewCard);
 }
@@ -134,14 +132,17 @@ function openPopupImage(link, name) {
   popupCaption.textContent = name;
   openModal(popupCardImage);
 }
-
-// -------------------------------------------------------------------------->
-
 // -------------------------------------------------------------------------->
 
 // включение валидации форм
 
 enableValidation();
+
+// -------------------------------------------------------------------------->
+
+// вывести карточки на страницу
+
+const cardsList = document.querySelector(".places__list");
 
 // -------------------------------------------------------------------------->
 

@@ -62,15 +62,13 @@ function updateCardInfo(card) {
   }).then((res) => checkResultStatus(res));
 }
 
-function deleteCardById() {
-  return fetch(`${config.baseUrl}/cards/669d83327a34af05a7b322bb`, {
+function deleteCardById(id) {
+  return fetch(`${config.baseUrl}/cards/${id}`, {
     headers: config.headers,
     method: 'DELETE',
   })
   .then(res => checkResultStatus(res))
 }
 
-
-console.log(getCardInfo());
 
 
