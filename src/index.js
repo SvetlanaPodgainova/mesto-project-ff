@@ -12,6 +12,13 @@ import {
   clearValidation,
   enableValidation,
 } from "./components/validation";
+import {
+  getUserInfo,
+  getCardInfo,
+  updateUserInfo,
+  updateCardInfo,
+  deleteCardById,
+} from "./components/api";
 
 // профиль пользователя
 
@@ -40,6 +47,13 @@ function openPopupUserProfile() {
   openModal(popupProfileEdit);
 }
 
+// заполняет профиль данными с сервера
+
+function renderUserInfo(data) {
+  userName.textContent = data.name;
+  userDescription.textContent = data.about;
+}
+
 // обработчик для кнопки "Сохранить" в форме профиля
 
 function handleProfileFormSubmit(evt) {
@@ -50,21 +64,10 @@ function handleProfileFormSubmit(evt) {
     about: jobInput.value,
   };
 
-  updateUserInfo(userConfig).then((data) => {
-    renderUserInfo(data);
-  });
+  updateUserInfo(userConfig).then((data) => renderUserInfo(data));
 
   closeModal(popupProfileEdit);
 }
-
-// заполняет профиль данными с сервера
-
-function renderUserInfo(data) {
-  userName.textContent = data.name;
-  userDescription.textContent = data.about;
-}
-
-// обновляет данные пользователя на сервере
 
 // -------------------------------------------------------------------------->
 
@@ -83,6 +86,18 @@ newCardButton.addEventListener("click", () => {
 });
 newCardForm.addEventListener("submit", handleFormNewCard);
 
+// вывести карточки на страницу
+
+const cardsList = document.querySelector(".places__list");
+
+// отрисовывает начальные карточки из сервера
+
+function renderCardInfo(data) {
+  data.forEach((item) => {
+    cardsList.prepend(addCard(item, deleteCard, likeCard, openPopupImage));
+  });
+}
+
 // обработчик для кнопки "Сохранить" в форме добавления новой карточки
 
 function handleFormNewCard(evt) {
@@ -93,12 +108,13 @@ function handleFormNewCard(evt) {
   );
   const newPlaceLink = newCardForm.querySelector(".popup__input_type_url");
 
-  const newCardUser = {
+  const newCardConfig = {
     name: newPlaceName.value,
     link: newPlaceLink.value,
   };
 
-  cardsList.prepend(addCard(newCardUser, deleteCard, likeCard, openPopupImage));
+  updateCardInfo(newCardConfig).then((data) => renderCardInfo(data));
+
   closeModal(popupNewCard);
 }
 
@@ -121,71 +137,20 @@ function openPopupImage(link, name) {
 
 // -------------------------------------------------------------------------->
 
-// вывести карточки на страницу
-
-const cardsList = document.querySelector(".places__list");
-
-initialCards.forEach(function (item) {
-  cardsList.append(addCard(item, deleteCard, likeCard, openPopupImage));
-});
-
 // -------------------------------------------------------------------------->
 
-// Валидация форм
+// включение валидации форм
 
 enableValidation();
 
 // -------------------------------------------------------------------------->
 
-// API
-
-const config = {
-  baseUrl: "https://mesto.nomoreparties.co/wff-cohort-19",
-  headers: {
-    authorization: "59657830-69a6-429d-89da-23a4d1d1cdd0",
-    "Content-Type": "application/json",
-  },
-};
-
-// проверяем статус ответа
-
-function checkResStatus(res) {
-  if (res.ok) {
-    return res.json();
-  } else {
-    return Promise.reject(`Ошибка: ${res.status}`);
-  }
-}
-
-// запрашиваем данные пользователя
-
-function getUserInfo() {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers,
-    method: "GET",
-  }).then((res) => checkResStatus(res));
-}
-
-getUserInfo().then((data) => {
-  console.log(data);
-});
-
-// заполняет профиль данными с сервера
-
-// function renderUserInfo(data) {
-//   userName.textContent = data.name
-//   userDescription.textContent = data.about
-// }
-
-// обновляет данные пользователя на сервере
-
-function updateUserInfo(info) {
-  return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers,
-    method: "PATCH",
-    body: JSON.stringify({
-      name: info.name,
-      about: info.about,
-    }),
-  }).then((res) => checkResStatus(res));
-}
+Promise.all([getUserInfo(), getCardInfo()])
+  .then(([userInfo, cardInfo]) => {
+    const myId = userInfo._id;
+    renderUserInfo(userInfo);
+    renderCardInfo(cardInfo);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

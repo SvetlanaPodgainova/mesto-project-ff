@@ -1,5 +1,6 @@
 export { cardsTemplate, addCard, deleteCard, likeCard };
 
+
 // @todo: Темплейт карточки
 
 const cardsTemplate = document.querySelector("#card-template").content;
