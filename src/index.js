@@ -7,7 +7,11 @@ import {
   likeCard,
 } from "./components/card";
 import { openModal, closeModal } from "./components/modal";
-import { validationConfig, clearValidation, enableValidation } from "./components/validation";
+import {
+  validationConfig,
+  clearValidation,
+  enableValidation,
+} from "./components/validation";
 
 // профиль пользователя
 
@@ -15,7 +19,8 @@ const popupProfileEdit = document.querySelector(".popup_type_edit");
 const buttonProfileEdit = document.querySelector(".profile__edit-button");
 
 const userName = document.querySelector(".profile__title");
-const userJob = document.querySelector(".profile__description");
+const userDescription = document.querySelector(".profile__description");
+const userAvatar = document.querySelector(".profile__image");
 
 const userForm = popupProfileEdit.querySelector(".popup__form");
 const nameInput = userForm.querySelector(".popup__input_type_name");
@@ -30,7 +35,7 @@ buttonProfileEdit.addEventListener("click", openPopupUserProfile);
 
 function openPopupUserProfile() {
   nameInput.value = userName.textContent;
-  jobInput.value = userJob.textContent;
+  jobInput.value = userDescription.textContent;
   clearValidation(popupProfileEdit, validationConfig);
   openModal(popupProfileEdit);
 }
@@ -39,10 +44,27 @@ function openPopupUserProfile() {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  userName.textContent = nameInput.value;
-  userJob.textContent = jobInput.value;
+
+  const userConfig = {
+    name: nameInput.value,
+    about: jobInput.value,
+  };
+
+  updateUserInfo(userConfig).then((data) => {
+    renderUserInfo(data);
+  });
+
   closeModal(popupProfileEdit);
 }
+
+// заполняет профиль данными с сервера
+
+function renderUserInfo(data) {
+  userName.textContent = data.name;
+  userDescription.textContent = data.about;
+}
+
+// обновляет данные пользователя на сервере
 
 // -------------------------------------------------------------------------->
 
@@ -112,3 +134,58 @@ initialCards.forEach(function (item) {
 // Валидация форм
 
 enableValidation();
+
+// -------------------------------------------------------------------------->
+
+// API
+
+const config = {
+  baseUrl: "https://mesto.nomoreparties.co/wff-cohort-19",
+  headers: {
+    authorization: "59657830-69a6-429d-89da-23a4d1d1cdd0",
+    "Content-Type": "application/json",
+  },
+};
+
+// проверяем статус ответа
+
+function checkResStatus(res) {
+  if (res.ok) {
+    return res.json();
+  } else {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+}
+
+// запрашиваем данные пользователя
+
+function getUserInfo() {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+    method: "GET",
+  }).then((res) => checkResStatus(res));
+}
+
+getUserInfo().then((data) => {
+  console.log(data);
+});
+
+// заполняет профиль данными с сервера
+
+// function renderUserInfo(data) {
+//   userName.textContent = data.name
+//   userDescription.textContent = data.about
+// }
+
+// обновляет данные пользователя на сервере
+
+function updateUserInfo(info) {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+    method: "PATCH",
+    body: JSON.stringify({
+      name: info.name,
+      about: info.about,
+    }),
+  }).then((res) => checkResStatus(res));
+}
