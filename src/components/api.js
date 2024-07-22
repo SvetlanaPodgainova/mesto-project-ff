@@ -1,4 +1,10 @@
-export { getUserInfo, getCardInfo, updateUserInfo, updateCardInfo, deleteCardById};
+export {
+  getUserInfo,
+  getCardInfo,
+  updateUserInfo,
+  updateCardInfo,
+  deleteCardById,
+};
 
 const config = {
   baseUrl: "https://mesto.nomoreparties.co/wff-cohort-19",
@@ -62,13 +68,31 @@ function updateCardInfo(card) {
   }).then((res) => checkResultStatus(res));
 }
 
+// удаляем карточку с сервера
+
 function deleteCardById(id) {
   return fetch(`${config.baseUrl}/cards/${id}`, {
     headers: config.headers,
-    method: 'DELETE',
-  })
-  .then(res => checkResultStatus(res))
+    method: "DELETE",
+  }).then((res) => checkResultStatus(res));
 }
 
+// поставить лайк на карточку
+
+export function likeCardNew(card) {
+  return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
+    headers: config.headers,
+    method: "PUT",
+  }).then((res) => checkResultStatus(res));
+}
+
+// удалить лайк
+
+export function unlikeCard(card) {
+  return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
+    headers: config.headers,
+    method: "DELETE",
+  }).then((res) => checkResultStatus(res));
+}
 
 

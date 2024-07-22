@@ -15,6 +15,21 @@
   transition: 0.3s;
 }
 
+.card__like_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card__like-counter {
+  min-inline-size: 10px;
+  min-block-size: 13px;
+  margin-block-start: 3px;  
+  font-size: 13px;
+  line-height: 1.21em;
+  text-align: center;
+}
+
 .card__like-button:hover {
   opacity: 0.6;
 }

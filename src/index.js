@@ -1,5 +1,5 @@
 import "./pages/index.css";
-import { initialCards } from "./components/cards";
+
 import {
   cardsTemplate,
   addCard,
@@ -71,6 +71,18 @@ function handleProfileFormSubmit(evt) {
 
 // -------------------------------------------------------------------------->
 
+// Карточки
+
+// отрисовывает начальные карточки из сервера
+
+const cardsContainer = document.querySelector(".places__list");
+
+function renderCardInfo(data) {
+  data.forEach((item) => {
+    cardsContainer.prepend(addCard(item, deleteCard, likeCard, openPopupImage));
+  });
+}
+
 // добавление новой карточки пользователем
 
 const popupNewCard = document.querySelector(".popup_type_new-card");
@@ -85,14 +97,6 @@ newCardButton.addEventListener("click", () => {
   openModal(popupNewCard);
 });
 newCardForm.addEventListener("submit", handleFormNewCard);
-
-// отрисовывает начальные карточки из сервера
-
-function renderCardInfo(data) {
-  data.forEach((item) => {
-    cardsList.prepend(addCard(item, deleteCard, likeCard, openPopupImage));
-  });
-}
 
 // обработчик для кнопки "Сохранить" в форме добавления новой карточки
 
@@ -109,14 +113,13 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  updateCardInfo(newCardConfig).then((data) => {
-    cardsList.prepend(addCard(data, deleteCard, likeCard, openPopupImage));
+  updateCardInfo(newCardConfig)
+  .then((data) => {
+    cardsContainer.prepend(addCard(data, deleteCard, likeCard, openPopupImage));
   });
 
   closeModal(popupNewCard);
 }
-
-// -------------------------------------------------------------------------->
 
 // попап для картинок
 
@@ -140,18 +143,17 @@ enableValidation();
 
 // -------------------------------------------------------------------------->
 
-// вывести карточки на страницу
-
-const cardsList = document.querySelector(".places__list");
-
-// -------------------------------------------------------------------------->
 
 Promise.all([getUserInfo(), getCardInfo()])
   .then(([userInfo, cardInfo]) => {
-    const myId = userInfo._id;
+    const myId = userInfo._id;    
     renderUserInfo(userInfo);
     renderCardInfo(cardInfo);
   })
   .catch((err) => {
     console.log(err);
   });
+
+
+ 
+  

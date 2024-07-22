@@ -1,5 +1,5 @@
 export { cardsTemplate, addCard, deleteCard, likeCard };
-
+import { likeCardNew, unlikeCard } from "./api";
 
 // @todo: Темплейт карточки
 
@@ -15,7 +15,8 @@ function addCard(card, deleteCard, likeCard, openPopupImage) {
   cardImage.alt = `фотография ${card.name}`;
 
   cardImage.addEventListener("click", () => {
-    openPopupImage(card.link, card.name) });
+    openPopupImage(card.link, card.name);
+  });
 
   const cardTitle = cardsItem.querySelector(".card__title");
   cardTitle.textContent = card.name;
@@ -26,7 +27,17 @@ function addCard(card, deleteCard, likeCard, openPopupImage) {
   });
 
   const likeButton = cardsItem.querySelector(".card__like-button");
-  likeButton.addEventListener("click", likeCard);
+  likeButton.addEventListener("click", (evt) => {
+    if (evt.target.classList.contains("card__like-button")) {
+      evt.target.classList.toggle("card__like-button_is-active");
+    }
+
+  });
+
+  function countLikes(likesLength) {
+    cardsItem.querySelector(".card__like-counter").textContent = likesLength;    
+  }
+  
 
   return cardsItem;
 }
@@ -44,3 +55,4 @@ function likeCard(evt) {
     evt.target.classList.toggle("card__like-button_is-active");
   }
 }
+
