@@ -1,5 +1,5 @@
-export { cardsTemplate, addCard, deleteCard, likeCard };
-import { likeCardNew, unlikeCard } from "./api";
+export { cardsTemplate, addCard, deleteCard };
+import { likeCard, unlikeCard } from "./api";
 
 // @todo: Темплейт карточки
 
@@ -7,7 +7,7 @@ const cardsTemplate = document.querySelector("#card-template").content;
 
 // @todo: Функция создания карточки
 
-function addCard(card, deleteCard, likeCard, openPopupImage) {
+function addCard(card, myId, deleteCard, openPopupImage) {
   const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardsItem.querySelector(".card__image");
@@ -27,17 +27,46 @@ function addCard(card, deleteCard, likeCard, openPopupImage) {
   });
 
   const likeButton = cardsItem.querySelector(".card__like-button");
-  likeButton.addEventListener("click", (evt) => {
-    if (evt.target.classList.contains("card__like-button")) {
-      evt.target.classList.toggle("card__like-button_is-active");
-    }
 
+  countLikes(card.likes.length);
+
+  // проверка и отображение только моих лайков
+
+  function checkLikeId() {
+    return card.likes.some(({ _id }) => {
+      return _id === myId;
+    });
+  }
+
+  if (checkLikeId()) {
+    likeButton.classList.add("card__like-button_is-active");
+  }
+
+  // отображение счетчика лайков
+
+  if (card.likes.length > 0) {
+    cardsItem.querySelector(".card__like-counter").style.display = "inline";
+  }
+
+  // слушатель для кнопки лайка
+
+  likeButton.addEventListener("click", (evt) => {
+    if (!evt.target.classList.contains("card__like-button_is-active")) {
+      likeCard(card._id).then((data) => {
+        countLikes(data.likes.length);
+        evt.target.classList.add("card__like-button_is-active");
+      });
+    } else {
+      unlikeCard(card._id).then((data) => {
+        countLikes(data.likes.length);
+        evt.target.classList.remove("card__like-button_is-active");
+      });
+    }
   });
 
   function countLikes(likesLength) {
-    cardsItem.querySelector(".card__like-counter").textContent = likesLength;    
+    cardsItem.querySelector(".card__like-counter").textContent = likesLength;
   }
-  
 
   return cardsItem;
 }
@@ -47,12 +76,3 @@ function addCard(card, deleteCard, likeCard, openPopupImage) {
 function deleteCard(item) {
   item.remove();
 }
-
-// Лайк карточки
-
-function likeCard(evt) {
-  if (evt.target.classList.contains("card__like-button")) {
-    evt.target.classList.toggle("card__like-button_is-active");
-  }
-}
-

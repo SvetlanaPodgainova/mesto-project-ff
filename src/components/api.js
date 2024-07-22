@@ -3,7 +3,8 @@ export {
   getCardInfo,
   updateUserInfo,
   updateCardInfo,
-  deleteCardById,
+  likeCard,
+  unlikeCard,
 };
 
 const config = {
@@ -79,19 +80,26 @@ function deleteCardById(id) {
 
 // поставить лайк на карточку
 
-export function likeCardNew(card) {
-  return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
-    headers: config.headers,
-    method: "PUT",
-  }).then((res) => checkResultStatus(res));
-}
+// function likeCard(card) {
+//   return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
+//     headers: config.headers,
+//     method: "PUT",
+//   }).then((res) => checkResultStatus(res));
+// }
 
 // удалить лайк
 
-export function unlikeCard(card) {
-  return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
+function unlikeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/like/${cardID}`, {
     headers: config.headers,
     method: "DELETE",
+  }).then((res) => checkResultStatus(res));
+}
+
+function likeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/like/${cardID}`, {
+    headers: config.headers,
+    method: "PUT",
   }).then((res) => checkResultStatus(res));
 }
 

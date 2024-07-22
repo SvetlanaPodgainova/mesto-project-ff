@@ -1,11 +1,6 @@
 import "./pages/index.css";
 
-import {
-  cardsTemplate,
-  addCard,
-  deleteCard,
-  likeCard,
-} from "./components/card";
+import { cardsTemplate, addCard, deleteCard } from "./components/card";
 import { openModal, closeModal } from "./components/modal";
 import {
   validationConfig,
@@ -52,6 +47,7 @@ function openPopupUserProfile() {
 function renderUserInfo(data) {
   userName.textContent = data.name;
   userDescription.textContent = data.about;
+  
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
@@ -77,9 +73,9 @@ function handleProfileFormSubmit(evt) {
 
 const cardsContainer = document.querySelector(".places__list");
 
-function renderCardInfo(data) {
+function renderCardInfo(data, myId) {
   data.forEach((item) => {
-    cardsContainer.prepend(addCard(item, deleteCard, likeCard, openPopupImage));
+    cardsContainer.prepend(addCard(item, myId, deleteCard, openPopupImage));
   });
 }
 
@@ -113,9 +109,10 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  updateCardInfo(newCardConfig)
-  .then((data) => {
-    cardsContainer.prepend(addCard(data, deleteCard, likeCard, openPopupImage));
+  updateCardInfo(newCardConfig).then((data) => {
+    cardsContainer.prepend(addCard(data, myId, deleteCard, openPopupImage));
+    const myId = data._id;
+    console.log(myId);
   });
 
   closeModal(popupNewCard);
@@ -143,12 +140,11 @@ enableValidation();
 
 // -------------------------------------------------------------------------->
 
-
 Promise.all([getUserInfo(), getCardInfo()])
   .then(([userInfo, cardInfo]) => {
-    const myId = userInfo._id;    
+    const myId = userInfo._id;
     renderUserInfo(userInfo);
-    renderCardInfo(cardInfo);
+    renderCardInfo(cardInfo, myId);
   })
   .catch((err) => {
     console.log(err);
@@ -156,4 +152,3 @@ Promise.all([getUserInfo(), getCardInfo()])
 
 
  
-  
