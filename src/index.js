@@ -47,7 +47,6 @@ function openPopupUserProfile() {
 function renderUserInfo(data) {
   userName.textContent = data.name;
   userDescription.textContent = data.about;
-  
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
@@ -124,12 +123,12 @@ const popupCardImage = document.querySelector(".popup_type_image");
 
 // открытие формы с отображением картинки и названия
 
-function openPopupImage(link, name) {
+function openPopupImage(card) {
   const popupImage = popupCardImage.querySelector(".popup__image");
   const popupCaption = popupCardImage.querySelector(".popup__caption");
-  popupImage.src = link;
-  popupImage.alt = name;
-  popupCaption.textContent = name;
+  popupImage.src = card.link;
+  popupImage.alt = card.name;
+  popupCaption.textContent = card.name;
   openModal(popupCardImage);
 }
 // -------------------------------------------------------------------------->
@@ -149,6 +148,3 @@ Promise.all([getUserInfo(), getCardInfo()])
   .catch((err) => {
     console.log(err);
   });
-
-
- 

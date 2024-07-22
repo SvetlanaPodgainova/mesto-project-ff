@@ -69,32 +69,7 @@ function updateCardInfo(card) {
   }).then((res) => checkResultStatus(res));
 }
 
-// удаляем карточку с сервера
-
-function deleteCardById(id) {
-  return fetch(`${config.baseUrl}/cards/${id}`, {
-    headers: config.headers,
-    method: "DELETE",
-  }).then((res) => checkResultStatus(res));
-}
-
-// поставить лайк на карточку
-
-// function likeCard(card) {
-//   return fetch(`${config.baseUrl}/cards/like/${card._id}`, {
-//     headers: config.headers,
-//     method: "PUT",
-//   }).then((res) => checkResultStatus(res));
-// }
-
-// удалить лайк
-
-function unlikeCard(cardID) {
-  return fetch(`${config.baseUrl}/cards/like/${cardID}`, {
-    headers: config.headers,
-    method: "DELETE",
-  }).then((res) => checkResultStatus(res));
-}
+// запутить лайк
 
 function likeCard(cardID) {
   return fetch(`${config.baseUrl}/cards/like/${cardID}`, {
@@ -103,4 +78,11 @@ function likeCard(cardID) {
   }).then((res) => checkResultStatus(res));
 }
 
+// удалить лайк с сервера
 
+function unlikeCard(cardID) {
+  return fetch(`${config.baseUrl}/cards/like/${cardID}`, {
+    headers: config.headers,
+    method: "DELETE",
+  }).then((res) => checkResultStatus(res));
+}

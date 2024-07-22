@@ -15,7 +15,7 @@ function addCard(card, myId, deleteCard, openPopupImage) {
   cardImage.alt = `фотография ${card.name}`;
 
   cardImage.addEventListener("click", () => {
-    openPopupImage(card.link, card.name);
+    openPopupImage(card);
   });
 
   const cardTitle = cardsItem.querySelector(".card__title");
