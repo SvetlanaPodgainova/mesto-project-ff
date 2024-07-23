@@ -5,6 +5,7 @@ export {
   updateCardInfo,
   likeCard,
   unlikeCard,
+  updateUserAvatar,
 };
 
 const config = {
@@ -86,3 +87,25 @@ function unlikeCard(cardID) {
     method: "DELETE",
   }).then((res) => checkResultStatus(res));
 }
+
+// обновляем аватар пользователя на сервере
+
+function updateUserAvatar(info) {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    headers: config.headers,
+    method: "PATCH",
+    body: JSON.stringify({
+      avatar: info.avatar
+    }),
+  }).then((res) => checkResultStatus(res));
+}
+
+
+
+
+
+
+
+
+
+

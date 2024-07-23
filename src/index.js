@@ -12,17 +12,56 @@ import {
   getCardInfo,
   updateUserInfo,
   updateCardInfo,
-  deleteCardById,
+  updateUserAvatar,
 } from "./components/api";
 
-// профиль пользователя
+// аватарка пользователя
 
-const popupProfileEdit = document.querySelector(".popup_type_edit");
-const buttonProfileEdit = document.querySelector(".profile__edit-button");
+const userAvatar = document.querySelector(".profile__image");
+const popupUserAvatar = document.querySelector(".popup_type_edit-avatar");
+const userAvatarForm = popupUserAvatar.querySelector(".popup__form");
+const avatarInput = userAvatarForm.querySelector(".popup__input_avatar");
+
+// слушатели
+
+userAvatar.addEventListener("click", () => {
+  openModal(popupUserAvatar);
+});
+userAvatarForm.addEventListener("submit", handleUserAvatarSubmit);
+
+// обработчик для кнопки "Сохранить"
+
+function handleUserAvatarSubmit(evt) {
+  evt.preventDefault();
+
+  const avatarConfig = {
+    avatar: avatarInput.value,
+  };
+
+  updateUserAvatar(avatarConfig)
+  .then((res) => {
+    console.log(res.avatar);
+    renderUserAvatar(res);
+    closeModal(popupUserAvatar);
+    userAvatarForm.reset();
+  });
+}
+
+// зарендерить данные аватара с сервера
+
+function renderUserAvatar(data) {
+  userAvatar.style.backgroundImage = `url(${data.avatar})`;
+}
+
+// -------------------------------------------------------------------------->
+
+// профиль пользователя (данные)
 
 const userName = document.querySelector(".profile__title");
 const userDescription = document.querySelector(".profile__description");
-const userAvatar = document.querySelector(".profile__image");
+
+const popupProfileEdit = document.querySelector(".popup_type_edit");
+const buttonProfileEdit = document.querySelector(".profile__edit-button");
 
 const userForm = popupProfileEdit.querySelector(".popup__form");
 const nameInput = userForm.querySelector(".popup__input_type_name");
@@ -30,8 +69,8 @@ const jobInput = userForm.querySelector(".popup__input_type_description");
 
 // слушатели
 
-userForm.addEventListener("submit", handleProfileFormSubmit);
 buttonProfileEdit.addEventListener("click", openPopupUserProfile);
+userForm.addEventListener("submit", handleProfileFormSubmit);
 
 // открытие формы с заполненными данными
 
@@ -46,7 +85,8 @@ function openPopupUserProfile() {
 
 function renderUserInfo(data) {
   userName.textContent = data.name;
-  userDescription.textContent = data.about;
+  userDescription.textContent = data.about;  
+  renderUserAvatar(data)
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
