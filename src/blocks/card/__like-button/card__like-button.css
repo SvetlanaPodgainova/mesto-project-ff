@@ -21,10 +21,9 @@
   align-items: center;
 }
 
-.card__like-counter {
-  display: none;
-  min-inline-size: 10px;
-  min-block-size: 13px;
+.card__like-counter {  
+  /* min-inline-size: 10px;
+  min-block-size: 13px; */
   margin-block-start: 3px;  
   font-size: 13px;
   line-height: 1.21em;

@@ -12,9 +12,12 @@
   border-radius: 10px;
   position: relative;
   overflow: hidden;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .card:hover {
-  transform: scale(1.1);
+  transform: scale(1.05) translateY(-0.6rem) translateX(-0.2rem);
+  -webkit-box-shadow: 0 10px 6px -6px #f9f7f749;
+  -moz-box-shadow: 0 10px 6px -6px #f9f7f749;
+  box-shadow: 6px 6px 10px 1px #f9f7f749, 0px -6px 10px 1px #22212141;
 }

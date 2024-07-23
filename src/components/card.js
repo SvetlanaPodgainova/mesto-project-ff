@@ -44,8 +44,13 @@ function addCard(card, myId, deleteCard, openPopupImage) {
 
   // отображение счетчика лайков
 
-  if (card.likes.length > 0) {
-    cardsItem.querySelector(".card__like-counter").style.display = "inline";
+  function countLikes(likesLength) {
+    cardsItem.querySelector(".card__like-counter").textContent = likesLength;
+    if (likesLength > 0) {
+      cardsItem.querySelector(".card__like-counter").style.display = "inline";
+    } else {
+      cardsItem.querySelector(".card__like-counter").style.display = "none";
+    }
   }
 
   // слушатель для кнопки лайка
@@ -63,10 +68,6 @@ function addCard(card, myId, deleteCard, openPopupImage) {
       });
     }
   });
-
-  function countLikes(likesLength) {
-    cardsItem.querySelector(".card__like-counter").textContent = likesLength;
-  }
 
   return cardsItem;
 }
