@@ -101,7 +101,15 @@ function updateUserAvatar(info) {
 }
 
 
+// удалить карточку с сервера 
 
+function deleteCard(_id) {
+  return fetch(`${config.baseUrl}/cards/${_id}`, {
+    headers: config.headers,
+    method: "DELETE",  
+  })}
+
+console.log(getCardInfo());
 
 
 

@@ -12,7 +12,9 @@
   border-radius: 10px;
   position: relative;
   overflow: hidden;
-  transition: 0.3s;
+  
+  transition: box-shadow 600ms cubic-bezier(.33,.11,.02,.99),
+  transform  600ms cubic-bezier(.33,.11,.02,.99);
 }
 
 .card:hover {
