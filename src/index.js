@@ -1,6 +1,6 @@
 import "./pages/index.css";
 
-import { cardsTemplate, addCard, deleteCard } from "./components/card";
+import { cardsTemplate, addCard } from "./components/card";
 import { openModal, closeModal } from "./components/modal";
 import {
   validationConfig,
@@ -13,6 +13,7 @@ import {
   updateUserInfo,
   updateCardInfo,
   updateUserAvatar,
+  handleDeletCardSubmit,
 } from "./components/api";
 
 // аватарка пользователя
@@ -38,8 +39,7 @@ function handleUserAvatarSubmit(evt) {
     avatar: avatarInput.value,
   };
 
-  updateUserAvatar(avatarConfig)
-  .then((res) => {
+  updateUserAvatar(avatarConfig).then((res) => {
     console.log(res.avatar);
     renderUserAvatar(res);
     closeModal(popupUserAvatar);
@@ -85,8 +85,8 @@ function openPopupUserProfile() {
 
 function renderUserInfo(data) {
   userName.textContent = data.name;
-  userDescription.textContent = data.about;  
-  renderUserAvatar(data)
+  userDescription.textContent = data.about;
+  renderUserAvatar(data);
 }
 
 // обработчик для кнопки "Сохранить" в форме профиля
@@ -114,13 +114,16 @@ const cardsContainer = document.querySelector(".places__list");
 
 function renderCardInfo(data, myId) {
   data.forEach((item) => {
-    cardsContainer.prepend(addCard(item, myId, deleteCard, openPopupImage));
+    cardsContainer.prepend(
+      addCard(item, myId, openPopupImage, openPopapDeleteCard)
+    );
   });
 }
 
 // добавление новой карточки пользователем
 
 const popupNewCard = document.querySelector(".popup_type_new-card");
+
 const newCardForm = popupNewCard.querySelector(".popup__form");
 const newCardButton = document.querySelector(".profile__add-button");
 
@@ -131,7 +134,37 @@ newCardButton.addEventListener("click", () => {
   clearValidation(popupNewCard, validationConfig);
   openModal(popupNewCard);
 });
+
 newCardForm.addEventListener("submit", handleFormNewCard);
+
+// удаление карточки
+
+const formDeleteCard = document.querySelector('form[name="delete-card"]');
+
+// открытие модалки (при открытии достаём card и cardsItem для дальнейшего удаления при сабмите)
+
+const popupDeleteCard = document.querySelector(".popup_type_delete-card");
+
+let cardForDelete;
+let cardItemForDelete;
+
+function openPopapDeleteCard(card, cardItem) {
+  cardForDelete = card;
+  cardItemForDelete = cardItem;
+  openModal(popupDeleteCard);
+}
+
+// слушатель для подверждения удаления
+
+formDeleteCard.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+
+  handleDeletCardSubmit(cardForDelete).then(() => {
+    cardItemForDelete.remove();
+  });
+
+  closeModal(document.querySelector(".popup_type_delete-card"));
+});
 
 // обработчик для кнопки "Сохранить" в форме добавления новой карточки
 
@@ -149,7 +182,9 @@ function handleFormNewCard(evt) {
   };
 
   updateCardInfo(newCardConfig).then((data) => {
-    cardsContainer.prepend(addCard(data, myId, deleteCard, openPopupImage));
+    cardsContainer.prepend(
+      addCard(data, myId, openPopupImage, openPopapDeleteCard)
+    );
     const myId = data._id;
     console.log(myId);
   });
@@ -171,12 +206,6 @@ function openPopupImage(card) {
   popupCaption.textContent = card.name;
   openModal(popupCardImage);
 }
-
-// удаление карточки
-
-const popupDeleteCard = document.querySelector(".popup_type_delete-card");
-
-
 
 // -------------------------------------------------------------------------->
 

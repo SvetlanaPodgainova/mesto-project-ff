@@ -1,4 +1,5 @@
-export { cardsTemplate, addCard, deleteCard };
+export { cardsTemplate, addCard };
+import { openModal } from "./modal";
 import { likeCard, unlikeCard } from "./api";
 
 // @todo: Темплейт карточки
@@ -7,7 +8,7 @@ const cardsTemplate = document.querySelector("#card-template").content;
 
 // @todo: Функция создания карточки
 
-function addCard(card, myId, deleteCard, openPopupImage) {
+function addCard(card, myId, openPopupImage, openPopapDeleteCard) {
   const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardsItem.querySelector(".card__image");
@@ -21,24 +22,21 @@ function addCard(card, myId, deleteCard, openPopupImage) {
   const cardTitle = cardsItem.querySelector(".card__title");
   cardTitle.textContent = card.name;
 
-  const deleteButton = cardsItem.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", () => {
-    deleteCard(cardsItem);
-  });
+  // лайки
 
   const likeButton = cardsItem.querySelector(".card__like-button");
 
   countLikes(card.likes.length);
 
-  // проверка и отображение только моих лайков
+  // проверка на мой Id
 
-  function checkId() {
+  function checkForMyId() {
     return card.likes.some(({ _id }) => {
       return _id === myId;
     });
   }
 
-  if (checkId()) {
+  if (checkForMyId()) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
@@ -69,11 +67,19 @@ function addCard(card, myId, deleteCard, openPopupImage) {
     }
   });
 
+  // удаление карточки
+
+  const deleteButton = cardsItem.querySelector(".card__delete-button");
+
+  // слушатель с проверкой на Id
+
+  if (card.owner._id === myId) {
+    deleteButton.addEventListener("click", () => {
+      openPopapDeleteCard(card, cardsItem);
+    });
+  } else {
+    deleteButton.remove();
+  }
+
   return cardsItem;
-}
-
-// @todo: Функция удаления карточки
-
-function deleteCard(item) {
-  item.remove();
 }

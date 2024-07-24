@@ -6,6 +6,7 @@ export {
   likeCard,
   unlikeCard,
   updateUserAvatar,
+  handleDeletCardSubmit,
 };
 
 const config = {
@@ -95,25 +96,19 @@ function updateUserAvatar(info) {
     headers: config.headers,
     method: "PATCH",
     body: JSON.stringify({
-      avatar: info.avatar
+      avatar: info.avatar,
     }),
   }).then((res) => checkResultStatus(res));
 }
 
+// удалить карточку с сервера
 
-// удалить карточку с сервера 
-
-function deleteCard(_id) {
-  return fetch(`${config.baseUrl}/cards/${_id}`, {
+function handleDeletCardSubmit(card) {
+  return fetch(`${config.baseUrl}/cards/${card._id}`, {
     headers: config.headers,
-    method: "DELETE",  
-  })}
-
-console.log(getCardInfo());
-
-
-
-
-
+    method: "DELETE",
+  })
+  .then(res => checkResultStatus(res))  
+}
 
 

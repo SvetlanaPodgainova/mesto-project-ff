@@ -19,5 +19,9 @@
 }
 
 .popup__content.popup__content-avatar {
-  min-block-size: 262px;
+  min-block-size: 200px;
+}
+
+.popup__content.popup__content-delete-card {
+  min-block-size: 181px;
 }
