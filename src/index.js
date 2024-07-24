@@ -171,6 +171,13 @@ function openPopupImage(card) {
   popupCaption.textContent = card.name;
   openModal(popupCardImage);
 }
+
+// удаление карточки
+
+const popupDeleteCard = document.querySelector(".popup_type_delete-card");
+
+
+
 // -------------------------------------------------------------------------->
 
 // включение валидации форм

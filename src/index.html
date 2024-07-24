@@ -144,6 +144,20 @@
       </div>
     </div>
 
+    <!-- Форма для удаления карточки -->
+
+    <div class="popup popup_type_delete-card popup_is-animated">
+      <div class="popup__content popup__content-delete-card">
+        <button type="button" class="popup__close"></button>
+        <h3 class="popup__title">Вы уверены?</h3>
+        <form class="popup__form" name="delete-card" novalidate>
+          <button type="submit" class="button popup__button">Да</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Темлейт карточек -->
+
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />

@@ -32,13 +32,13 @@ function addCard(card, myId, deleteCard, openPopupImage) {
 
   // проверка и отображение только моих лайков
 
-  function checkLikeId() {
+  function checkId() {
     return card.likes.some(({ _id }) => {
       return _id === myId;
     });
   }
 
-  if (checkLikeId()) {
+  if (checkId()) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
