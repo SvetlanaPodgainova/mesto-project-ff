@@ -115,7 +115,7 @@ const cardsContainer = document.querySelector(".places__list");
 function renderCardInfo(data, myId) {
   data.forEach((item) => {
     cardsContainer.prepend(
-      addCard(item, myId, openPopupImage, openPopapDeleteCard)
+      addCard(item, myId, openPopupImage, openPopupDeleteCard)
     );
   });
 }
@@ -148,7 +148,7 @@ const popupDeleteCard = document.querySelector(".popup_type_delete-card");
 let cardForDelete;
 let cardItemForDelete;
 
-function openPopapDeleteCard(card, cardItem) {
+function openPopupDeleteCard(card, cardItem) {
   cardForDelete = card;
   cardItemForDelete = cardItem;
   openModal(popupDeleteCard);
@@ -181,12 +181,17 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
+  // updateCardInfo(newCardConfig)
+  // .then((data) => {
+  //  console.log(data);;
+  //   const myId = data._id;
+  // });
+
   updateCardInfo(newCardConfig).then((data) => {
+    const myId = data.owner._id;
     cardsContainer.prepend(
-      addCard(data, myId, openPopupImage, openPopapDeleteCard)
+      addCard(data, myId, openPopupImage, openPopupDeleteCard)
     );
-    const myId = data._id;
-    console.log(myId);
   });
 
   closeModal(popupNewCard);

@@ -8,7 +8,7 @@ const cardsTemplate = document.querySelector("#card-template").content;
 
 // @todo: Функция создания карточки
 
-function addCard(card, myId, openPopupImage, openPopapDeleteCard) {
+function addCard(card, myId, openPopupImage, openPopupDeleteCard) {
   const cardsItem = cardsTemplate.querySelector(".card").cloneNode(true);
 
   const cardImage = cardsItem.querySelector(".card__image");
@@ -75,10 +75,10 @@ function addCard(card, myId, openPopupImage, openPopapDeleteCard) {
 
   if (card.owner._id === myId) {
     deleteButton.addEventListener("click", () => {
-      openPopapDeleteCard(card, cardsItem);
+      openPopupDeleteCard(card, cardsItem);
     });
   } else {
-    deleteButton.remove();
+    deleteButton.style.display = "none";
   }
 
   return cardsItem;
