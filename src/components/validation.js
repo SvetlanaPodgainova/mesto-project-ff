@@ -1,18 +1,17 @@
 // Валидация форм
 
-export { validationConfig, clearValidation, enableValidation };
+export { clearValidation, enableValidation };
 
-const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inputErrorClass: "popup__input_type_error",
-  errorSpanClass: "popup__input-error_active",
-};
+// Валидация форм
 
 // добавляет класс с ошибкой
 
-function showInputError(formElement, formInput, errorMessage) {
+function showInputError(
+  formElement,
+  formInput,
+  errorMessage,
+  validationConfig
+) {
   const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
 
   formInput.classList.add(validationConfig.inputErrorClass);
@@ -22,17 +21,18 @@ function showInputError(formElement, formInput, errorMessage) {
 
 // удаляет класс с ошибкой
 
-function hideInputError(formElement, formInput) {
+function hideInputError(formElement, formInput, validationConfig) {
   const errorSpan = formElement.querySelector(`.${formInput.id}-error`);
 
   formInput.classList.remove(validationConfig.inputErrorClass);
   errorSpan.textContent = "";
   errorSpan.classList.remove(validationConfig.errorSpanClass);
+  formInput.setCustomValidity("");
 }
 
 // проверяет валидность поля
 
-function checkInputValidity(formElement, formInput) {
+function checkInputValidity(formElement, formInput, validationConfig) {
   if (formInput.validity.patternMismatch) {
     formInput.setCustomValidity(formInput.dataset.errorMessage);
   } else {
@@ -40,15 +40,15 @@ function checkInputValidity(formElement, formInput) {
   }
 
   if (!formInput.validity.valid) {
-    showInputError(formElement, formInput, formInput.validationMessage);
+    showInputError(formElement, formInput, formInput.validationMessage, validationConfig);
   } else {
-    hideInputError(formElement, formInput);
+    hideInputError(formElement, formInput, validationConfig);
   }
 }
 
 // добавляем слушатель всем формам
 
-function setEventListeners(formElement) {
+function setEventListeners(formElement, validationConfig) {
   const inputList = Array.from(
     formElement.querySelectorAll(validationConfig.inputSelector)
   );
@@ -58,7 +58,7 @@ function setEventListeners(formElement) {
 
   inputList.forEach((formInput) => {
     formInput.addEventListener("input", () => {
-      checkInputValidity(formElement, formInput);
+      checkInputValidity(formElement, formInput, validationConfig);
       toggleButtonState(inputList, formButton);
     });
   });
@@ -66,13 +66,13 @@ function setEventListeners(formElement) {
 
 // находим, перебираем и вешаем слушателя на все формы на сайте
 
-function enableValidation() {
+function enableValidation(validationConfig) {
   const formList = Array.from(
     document.querySelectorAll(validationConfig.formSelector)
   );
 
   formList.forEach((formElement) => {
-    setEventListeners(formElement);
+    setEventListeners(formElement, validationConfig);
   });
 }
 
@@ -102,7 +102,7 @@ function clearValidation(formElement, validationConfig) {
   );
 
   inputList.forEach((formInput) => {
-    hideInputError(formElement, formInput);
+    hideInputError(formElement, formInput, validationConfig);
   });
   toggleButtonState(
     inputList,

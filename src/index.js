@@ -1,12 +1,8 @@
 import "./pages/index.css";
 
-import { cardsTemplate, addCard } from "./components/card";
+import { addCard } from "./components/card";
 import { openModal, closeModal } from "./components/modal";
-import {
-  validationConfig,
-  clearValidation,
-  enableValidation,
-} from "./components/validation";
+import { clearValidation, enableValidation } from "./components/validation";
 import {
   getUserInfo,
   getCardInfo,
@@ -16,6 +12,14 @@ import {
   handleDeletCardSubmit,
 } from "./components/api";
 
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input_type_error",
+  errorSpanClass: "popup__input-error_active",
+};
+
 // вывод ошибки в консоль
 
 function renderError(err) {
@@ -24,9 +28,11 @@ function renderError(err) {
 
 // отображение загрузки
 
-function renderLoading(isLoading) {
+function renderLoading(isLoading, buttonElement) {
   if (isLoading) {
-    document.querySelector(".popup__button").textContent = "Сохранение";
+    buttonElement.textContent = "Сохранение...";
+  } else {
+    buttonElement.textContent = "Сохранить";
   }
 }
 
@@ -40,6 +46,7 @@ const avatarInput = userAvatarForm.querySelector(".popup__input_avatar");
 // слушатели
 
 userAvatar.addEventListener("click", () => {
+  clearValidation(popupUserAvatar, validationConfig);
   openModal(popupUserAvatar);
 });
 userAvatarForm.addEventListener("submit", handleUserAvatarSubmit);
@@ -48,7 +55,7 @@ userAvatarForm.addEventListener("submit", handleUserAvatarSubmit);
 
 function handleUserAvatarSubmit(evt) {
   evt.preventDefault();
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
 
   const avatarConfig = {
     avatar: avatarInput.value,
@@ -58,10 +65,9 @@ function handleUserAvatarSubmit(evt) {
     .then((res) => {
       renderUserAvatar(res);
       closeModal(popupUserAvatar);
-      userAvatarForm.reset();
     })
     .catch((err) => renderError(err))
-    .finally(() => renderLoading(false));
+    .finally(() => renderLoading(false, evt.submitter));
 }
 
 // зарендерить данные аватара с сервера
@@ -109,7 +115,7 @@ function renderUserInfo(data) {
 // обработчик для кнопки "Сохранить" в форме профиля
 
 function handleProfileFormSubmit(evt) {
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
   evt.preventDefault();
 
   const userConfig = {
@@ -118,11 +124,12 @@ function handleProfileFormSubmit(evt) {
   };
 
   updateUserInfo(userConfig)
-    .then((data) => renderUserInfo(data))
+    .then((data) => {
+      renderUserInfo(data);
+      closeModal(popupProfileEdit);
+    })
     .catch((err) => renderError(err))
-    .finally(() => renderLoading(false));
-
-  closeModal(popupProfileEdit);
+    .finally(() => renderLoading(false, evt.submitter));
 }
 
 // -------------------------------------------------------------------------->
@@ -135,7 +142,7 @@ const cardsContainer = document.querySelector(".places__list");
 
 function renderCardInfo(data, myId) {
   data.forEach((item) => {
-    cardsContainer.prepend(
+    cardsContainer.append(
       addCard(item, myId, openPopupImage, openPopupDeleteCard)
     );
   });
@@ -179,7 +186,7 @@ function openPopupDeleteCard(card, cardItem) {
 
 function handleFormNewCard(evt) {
   evt.preventDefault();
-  renderLoading(true);
+  renderLoading(true, evt.submitter);
 
   const newPlaceName = newCardForm.querySelector(
     ".popup__input_type_card-name"
@@ -197,11 +204,10 @@ function handleFormNewCard(evt) {
       cardsContainer.prepend(
         addCard(data, myId, openPopupImage, openPopupDeleteCard)
       );
+      closeModal(popupNewCard);
     })
     .catch((err) => renderError(err))
-    .finally(() => renderLoading(false));
-
-  closeModal(popupNewCard);
+    .finally(() => renderLoading(false, evt.submitter));
 }
 
 // слушатель для подверждения удаления
@@ -209,11 +215,14 @@ function handleFormNewCard(evt) {
 formDeleteCard.addEventListener("submit", (evt) => {
   evt.preventDefault();
 
-  handleDeletCardSubmit(cardForDelete).then(() => {
+  handleDeletCardSubmit(cardForDelete)
+  .then(() => {
     cardItemForDelete.remove();
-  });
+    closeModal(document.querySelector(".popup_type_delete-card"));
+  })
+  .catch(err => renderError(err))
 
-  closeModal(document.querySelector(".popup_type_delete-card"));
+  
 });
 
 // попап для картинок
@@ -235,7 +244,7 @@ function openPopupImage(card) {
 
 // включение валидации форм
 
-enableValidation();
+enableValidation(validationConfig);
 
 // -------------------------------------------------------------------------->
 

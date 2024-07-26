@@ -1,5 +1,4 @@
-export { cardsTemplate, addCard };
-import { openModal } from "./modal";
+export {addCard };
 import { likeCard, unlikeCard } from "./api";
 
 // @todo: Темплейт карточки
@@ -55,15 +54,19 @@ function addCard(card, myId, openPopupImage, openPopupDeleteCard) {
 
   likeButton.addEventListener("click", (evt) => {
     if (!evt.target.classList.contains("card__like-button_is-active")) {
-      likeCard(card._id).then((data) => {
+      likeCard(card._id)
+      .then((data) => {
         countLikes(data.likes.length);
         evt.target.classList.add("card__like-button_is-active");
-      });
+      })
+      .catch(err => renderError(err))
     } else {
-      unlikeCard(card._id).then((data) => {
+      unlikeCard(card._id)
+      .then((data) => {
         countLikes(data.likes.length);
         evt.target.classList.remove("card__like-button_is-active");
-      });
+      })
+      .catch(err => renderError(err))
     }
   });
 
