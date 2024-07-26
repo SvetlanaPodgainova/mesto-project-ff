@@ -107,8 +107,5 @@ function handleDeletCardSubmit(card) {
   return fetch(`${config.baseUrl}/cards/${card._id}`, {
     headers: config.headers,
     method: "DELETE",
-  })
-  .then(res => checkResultStatus(res))  
+  }).then((res) => checkResultStatus(res));
 }
-
-

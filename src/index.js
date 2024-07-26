@@ -16,6 +16,20 @@ import {
   handleDeletCardSubmit,
 } from "./components/api";
 
+// вывод ошибки в консоль
+
+function renderError(err) {
+  console.log(err);
+}
+
+// отображение загрузки
+
+function renderLoading(isLoading) {
+  if (isLoading) {
+    document.querySelector(".popup__button").textContent = "Сохранение";
+  }
+}
+
 // аватарка пользователя
 
 const userAvatar = document.querySelector(".profile__image");
@@ -34,17 +48,20 @@ userAvatarForm.addEventListener("submit", handleUserAvatarSubmit);
 
 function handleUserAvatarSubmit(evt) {
   evt.preventDefault();
+  renderLoading(true);
 
   const avatarConfig = {
     avatar: avatarInput.value,
   };
 
-  updateUserAvatar(avatarConfig).then((res) => {
-    console.log(res.avatar);
-    renderUserAvatar(res);
-    closeModal(popupUserAvatar);
-    userAvatarForm.reset();
-  });
+  updateUserAvatar(avatarConfig)
+    .then((res) => {
+      renderUserAvatar(res);
+      closeModal(popupUserAvatar);
+      userAvatarForm.reset();
+    })
+    .catch((err) => renderError(err))
+    .finally(() => renderLoading(false));
 }
 
 // зарендерить данные аватара с сервера
@@ -92,6 +109,7 @@ function renderUserInfo(data) {
 // обработчик для кнопки "Сохранить" в форме профиля
 
 function handleProfileFormSubmit(evt) {
+  renderLoading(true);
   evt.preventDefault();
 
   const userConfig = {
@@ -99,7 +117,10 @@ function handleProfileFormSubmit(evt) {
     about: jobInput.value,
   };
 
-  updateUserInfo(userConfig).then((data) => renderUserInfo(data));
+  updateUserInfo(userConfig)
+    .then((data) => renderUserInfo(data))
+    .catch((err) => renderError(err))
+    .finally(() => renderLoading(false));
 
   closeModal(popupProfileEdit);
 }
@@ -154,22 +175,11 @@ function openPopupDeleteCard(card, cardItem) {
   openModal(popupDeleteCard);
 }
 
-// слушатель для подверждения удаления
-
-formDeleteCard.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-
-  handleDeletCardSubmit(cardForDelete).then(() => {
-    cardItemForDelete.remove();
-  });
-
-  closeModal(document.querySelector(".popup_type_delete-card"));
-});
-
 // обработчик для кнопки "Сохранить" в форме добавления новой карточки
 
 function handleFormNewCard(evt) {
   evt.preventDefault();
+  renderLoading(true);
 
   const newPlaceName = newCardForm.querySelector(
     ".popup__input_type_card-name"
@@ -181,21 +191,30 @@ function handleFormNewCard(evt) {
     link: newPlaceLink.value,
   };
 
-  // updateCardInfo(newCardConfig)
-  // .then((data) => {
-  //  console.log(data);;
-  //   const myId = data._id;
-  // });
-
-  updateCardInfo(newCardConfig).then((data) => {
-    const myId = data.owner._id;
-    cardsContainer.prepend(
-      addCard(data, myId, openPopupImage, openPopupDeleteCard)
-    );
-  });
+  updateCardInfo(newCardConfig)
+    .then((data) => {
+      const myId = data.owner._id;
+      cardsContainer.prepend(
+        addCard(data, myId, openPopupImage, openPopupDeleteCard)
+      );
+    })
+    .catch((err) => renderError(err))
+    .finally(() => renderLoading(false));
 
   closeModal(popupNewCard);
 }
+
+// слушатель для подверждения удаления
+
+formDeleteCard.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+
+  handleDeletCardSubmit(cardForDelete).then(() => {
+    cardItemForDelete.remove();
+  });
+
+  closeModal(document.querySelector(".popup_type_delete-card"));
+});
 
 // попап для картинок
 
