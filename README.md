@@ -1,2 +1,3 @@
 # Проектная работа Mesto
-https://github.com/SPodgainova/mesto-project-ff.git
+## H2 Описание
+https://svetlanapodgainova.github.io/mesto-project-ff/
