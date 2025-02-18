@@ -1,4 +1,4 @@
-# Проектная работа Mesto
+# Платформа для обмена фотографиями Mesto
 ## Описание
 Сайт для размещение фотографий с локациями.  
 https://svetlanapodgainova.github.io/mesto-project-ff/  
